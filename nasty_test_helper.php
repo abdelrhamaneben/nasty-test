@@ -9,7 +9,7 @@ if ( ! function_exists('nasty_assert')) {
 		else {
 		    $msg = "<span style=\"color:white;background-color:red; margin-right:10px;\"> FAILED </span>".$msg;
         }
-        print_r("<p style=\"\">".$msg." function: ".$debug[0]['function'].", line: ".$debug[0]['line'].", file: ".$debug[0]['file']."</p>");
+        print_r(utf8_decode("<p style=\"\">".$msg." function: ".$debug[0]['function'].", line: ".$debug[0]['line'].", file: ".$debug[0]['file']."</p>"));
 	}
 }
 
@@ -98,23 +98,39 @@ if ( ! function_exists('assertNoPattern')) {
 	}
 }
 if ( ! function_exists('nasty_debug')) {
-     	function nasty_debug($val) {
-     	   echo "<style></style>";
-	   echo "<div class=\"nasty_debug\">";
-        print_r($val);
-        echo "</div>";
+     function nasty_debug($val) {
+     	echo "<style>
+     		.nasty_table_debug{
+     			border: 1px solid #59565F;
+				background-color: #C9C9D2;
+     		}
+     		.nasty_tr_1 {
+     			background-color:#ACACD7;
+     		}
+     	</style>";
+		echo "<table class='nasty_table_debug'>";
+		echo "<tr><td>Function : ".debug_backtrace()[1]['function']."</td></tr>";
+		echo "<tr class='nasty_tr_1'><td>Line : ".debug_backtrace()[0]['line']."</td></tr>";
+       	echo "<tr><td>Contents : ";
+		var_dump($val);
+		echo "</td></tr>";
+		echo "<tr class='nasty_tr_1'><td>File : ".debug_backtrace()[0]['file']."</td></tr>";
+		echo "</table><br>";
 	}
 }
 if ( ! function_exists('nasty_go')) {
 	function nasty_go() {
-		$methods = get_class_methods($this);
+		$class = debug_backtrace()[1]['class'];
+		$class = new $class();
+		$methods = get_class_methods($class);
         foreach($methods as $method) {
                 if(preg_match("/^test_/",$method) > 0) {
-                    if(method_exists($this,"before"))
-                        $this->before();
-                    $this->{$method}();
-                    if(method_exists($this,"after"))
-                        $this->after();
+                    if(method_exists($class ,"before"))
+                        $class->before();
+					print_r(utf8_decode("<h2>Exécution de la fonction ".$method."</h2>"));
+                    $class->{$method}();
+                    if(method_exists($class ,"after"))
+                        $class->after();
                 }
         }
 	}
