@@ -1,118 +1,106 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-if ( ! function_exists('assertEquals')) {
-	function assert($expression, $msg = null) {
-		if($msg == null) 
-            $msg = "assert : ";
+if ( ! function_exists('nasty_assert')) {
+	function nasty_assert($expression, $msg = "" , $debug = null) {
+		if($debug == null)
+			$debug = debug_backtrace();
 		if($expression) {
-			  $msg = "<span style=\"color:white;background-color:green;\">PASSED</span>".$msg;
+			  $msg = "<span style=\"color:white;background-color:green; margin-right:10px;\"> PASSED </span>".$msg;
 		}
 		else {
-		    $msg = "<span style=\"color:white;background-color:red;\">FAILED</span>".$msg;
+		    $msg = "<span style=\"color:white;background-color:red; margin-right:10px;\"> FAILED </span>".$msg;
         }
-        echo "<p style=\"border:solid 1px grey;border-radius:10px;\">".$msg."</p>";
+        print_r("<p style=\"\">".$msg." function: ".$debug[0]['function'].", line: ".$debug[0]['line'].", file: ".$debug[0]['file']."</p>");
 	}
 }
 
 if ( ! function_exists('assertNotEquals')) {
-	function assertNotEquals($val1 ,$val2 $msg = null) {
-		if($msg == null) 
-            $msg = "assertNotEquals: ";
-        assert($val1 != $val2 , $msg);
+	function assertNotEquals($val1 ,$val2 ,$msg = "",$debug = null) {
+		if($debug == null)
+			$debug = debug_backtrace();
+        nasty_assert($val1 != $val2 , $msg,$debug);
 	}
 }
-
 if ( ! function_exists('assertEquals')) {
-	function assertEquals($val1 ,$val2 $msg = null) {
-		if($msg == null) 
-            $msg = "assertEquals: ";
-        assert($val1 == $val2 , $msg);
+	function assertEquals($val1 ,$val2, $msg = "",$debug = null) {
+		if($debug == null)
+			$debug = debug_backtrace();
+        nasty_assert($val1 == $val2 , $msg,$debug);
 	}
 }
 if ( ! function_exists('assertIdentical')) {
-	function assertIdentical($val1 ,$val2 $msg = null) {
-		if($msg == null) 
-            $msg = "assertIdentical: ";
-        assert($val1 === $val2 , $msg);
+	function assertIdentical($val1 ,$val2, $msg = "",$debug = null) {
+		if($debug == null)
+			$debug = debug_backtrace();
+        nasty_assert($val1 === $val2 , $msg,$debug);
 	}
 }
 if ( ! function_exists('assertINotdentical')) {
-	function assertINotdentical($val1 ,$val2 $msg = null) {
-		if($msg == null) 
-            $msg = "assertINotdentical: ";
-        assert($val1 !== $val2 , $msg);
+	function assertNotIdentical($val1 ,$val2 ,$msg = "",$debug = null) {
+		if($debug == null)
+			$debug = debug_backtrace();
+        nasty_assert($val1 !== $val2 , $msg,$debug);
 	}
 }
 if ( ! function_exists('assertTrue')) {
-	function assertTrue($val , $msg = null) {
-		if($msg == null) 
-            $msg = "assertTrue: ";
-        assert($val == True,$msg);
+	function assertTrue($val , $msg = "",$debug = null) {
+		if($debug == null)
+			$debug = debug_backtrace();
+        nasty_assert($val == True,$msg,$debug);
 	}
 }
 if ( ! function_exists('assertNull')) {
-	function assertTrue($val , $msg = null) {
-		if($msg == null) 
-            $msg = "assertNull: ";
-        assert($val == null,$msg);
+	function assertNull($val , $msg = "",$debug) {
+		if($debug == null)
+			$debug = debug_backtrace();
+        nasty_assert($val == null,$msg,$debug);
 	}
 }
 if ( ! function_exists('assertNotNull')) {
-	function assertTrue($val , $msg = null) {
-		if($msg == null) 
-            $msg = "assertNotNull: ";
-        assert($val != null,$msg);
+	function assertNotNull($val , $msg = "", $debug) {
+		if($debug == null)
+			$debug = debug_backtrace();
+        nasty_assert($val != null,$msg,$debug);
 	}
 }
 if ( ! function_exists('assertFalse')) {
-	function assertFalse($val1 , $msg = null) {
-		if($msg == null) 
-            $msg = "assertFalse: ";
-        assertEquals($val1 == False,$msg);
+	function assertFalse($val1 , $msg = "",$debug = null) {
+		if($debug == null)
+			$debug = debug_backtrace();
+        assertEquals($val1 ,False,$msg,$debug);
 	}
 }
-
 if ( ! function_exists('assertInArray')) {
-	function assertInArray($array , $item $msg = null) {
-		if($msg == null) 
-            $msg = "assertInArray: ";
-        assertEquals(in_array($item,$array),$msg);
+	function assertInArray($array , $item, $msg = "", $debug = null) {
+		if($debug == null)
+			$debug = debug_backtrace();
+        assertTrue(in_array($item,$array),$msg,$debug);
 	}
 }
-
-if ( ! function_exists('assertInArray')) {
-	function assertInArray($array , $item, $msg = null) {
-		if($msg == null) 
-            $msg = "assertInArray: ";
-        assertEquals(in_array($item,$array),$msg);
-	}
-}
-
 if ( ! function_exists('fail')) {
-	function fail($msg = null) {
-		if($msg == null) 
-            $msg = "Fail: ";
-        assert(false,$msg);
+	function fail($msg = "",$debug = null) {
+		if($debug == null)
+			$debug = debug_backtrace();
+        nasty_assert(false,$msg,$debug);
 	}
 }
-
 if ( ! function_exists('assertPattern')) {
-	function assertPattern($pattern,$subject,$msg = null) {
-		if($msg == null) 
-            $msg = "assertPattern: ";
-        assertTrue(preg_match($pattern,$subject) > 0,$msg);
+	function assertPattern($pattern,$subject,$msg = "",$debug = null) {
+		if($debug == null)
+			$debug = debug_backtrace();
+        assertTrue(preg_match($pattern,$subject) > 0,$msg,$debug);
 	}
 }
 if ( ! function_exists('assertNoPattern')) {
-	function assertPattern($pattern,$subject,$msg = null) {
-		if($msg == null) 
-            $msg = "assertNoPattern: ";
-        assertFalse(preg_match($pattern,$subject) > 0,$msg);
+	function assertNoPattern($pattern,$subject,$msg = "",$debug = null) {
+		if($debug == null)
+			$debug = debug_backtrace();
+        assertFalse(preg_match($pattern,$subject) > 0,$msg,$debug);
 	}
 }
 if ( ! function_exists('nasty_debug')) {
-	function nasty_debug($val) {
-        echo "<style></style>";
-		echo "<div class=\"nasty_debug\">";
+     	function nasty_debug($val) {
+     	   echo "<style></style>";
+	   echo "<div class=\"nasty_debug\">";
         print_r($val);
         echo "</div>";
 	}
